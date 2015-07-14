@@ -14,7 +14,8 @@ class GameScene: SKScene {
     var plane:SKSpriteNode!
     var isTouched = false
     
-    var bulletTime:NSTimeInterval = 0.2//子弹发射间隔
+    var bulletTime:NSTimeInterval = 0.15//子弹发射间隔
+    var boneTime:NSTimeInterval = 1
     var lastTime:NSTimeInterval = 0//上次发射的时间点
 
     
@@ -26,7 +27,6 @@ class GameScene: SKScene {
         plane.name = "plane"
         self.addChild(plane) //添加精灵到场景中
         
-
         
     }
     
@@ -53,12 +53,35 @@ class GameScene: SKScene {
     }
     
     
+    func createbone()
+    {
+        var xstart = random() * size.width
+        var bone = SKShapeNode(rectOfSize: CGSizeMake(20, 20))
+        bone.position = CGPointMake(xstart, size.height)
+        bone.strokeColor = UIColor.clearColor()
+        bone.fillColor = UIColor.greenColor()
+        addChild(bone)
+        bone.runAction(SKAction.sequence([SKAction.moveByX(0, y: -size.height, duration: 3), SKAction.removeFromParent()]))
+    }
+    
+    
+    
+    func random() -> CGFloat {
+        return CGFloat(Float(arc4random()) / 0xFFFFFFFF)
+    }
+    
+    
+    func random(#min: CGFloat, max: CGFloat) -> CGFloat {
+        return random() * (max - min) + min
+    }
+    
+    
     func sendBullet()
     {
         var bullet = SKShapeNode(rectOfSize: CGSizeMake(10, 10))
         bullet.position = CGPointMake(plane.position.x, plane.position.y + 50)
         bullet.strokeColor = UIColor.clearColor()
-        bullet.fillColor = UIColor.greenColor()
+        bullet.fillColor = UIColor.yellowColor()
         self.addChild(bullet)
         bullet.runAction(SKAction.sequence([SKAction.moveByX(0, y:size.height, duration: 2), SKAction.removeFromParent()]))
     }
@@ -69,7 +92,12 @@ class GameScene: SKScene {
         if(currentTime >= lastTime + bulletTime){
             //创建子弹....
             sendBullet()
+            if (random() > 0.35)
+            {
+                createbone()
+            }
             lastTime = currentTime
         }
+
     }
 }
