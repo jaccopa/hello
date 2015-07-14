@@ -85,13 +85,37 @@ class GameScene: SKScene {
         self.addChild(bullet)
         bullet.runAction(SKAction.sequence([SKAction.moveByX(0, y:size.height, duration: 2), SKAction.removeFromParent()]))
     }
+    
+    func sendBulletTwo()
+    {
+        var bullet = SKShapeNode(rectOfSize: CGSizeMake(10, 10))
+        bullet.position = CGPointMake(plane.position.x - 10, plane.position.y + 50)
+        bullet.strokeColor = UIColor.clearColor()
+        bullet.fillColor = UIColor.yellowColor()
+        self.addChild(bullet)
+        bullet.runAction(SKAction.sequence([SKAction.moveByX(-100, y:size.height, duration: 2), SKAction.removeFromParent()]))
+        
+        var bullet2 = SKShapeNode(rectOfSize: CGSizeMake(10, 10))
+        bullet2.position = CGPointMake(plane.position.x + 10, plane.position.y + 50)
+        bullet2.strokeColor = UIColor.clearColor()
+        bullet2.fillColor = UIColor.yellowColor()
+        self.addChild(bullet2)
+        bullet2.runAction(SKAction.sequence([SKAction.moveByX(+100, y:size.height, duration: 2), SKAction.removeFromParent()]))
+    }
    
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
         
         if(currentTime >= lastTime + bulletTime){
             //创建子弹....
-            sendBullet()
+            if(random() > 0.5)
+            {
+                sendBulletTwo()
+            }
+            else
+            {
+                sendBullet()
+            }
             if (random() > 0.35)
             {
                 createbone()
